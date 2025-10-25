@@ -9,22 +9,38 @@ def encode_locations(arr, obj):
     for row in range(3):
         for col in range(3):
             obj[arr[row][col]] = [row, col]
-    print("\n", obj)
     return obj
+
+# Stringifies the state so we can easily look it up in our visited dict
+def stringify(state):
+    stringified = "".join(["".join(row) for row in state])
+    return stringified
 
 # h1(n) = the sum of the Manhattan distances of the tiles from their goal positions
 def h1n(curr, goal):
+    print("curr", curr)
+    print("goal", goal)
     sum = 0
+    for item in curr.keys():
+        sum += abs(goal.get(item)[0] - curr.get(item)[0]) + abs(goal.get(item)[1] - curr.get(item)[1])
+    print("sum", sum)
     return sum
 
 def heuristic1(initial, goal, problem=""):
     # if (problem):
-    #     output = open(f"output{problem}h1.txt")
+    #     output = open(f"output{problem}h1.txt", "w")
     curr = initial
     step_cost = 0
+    visited = {} 
+    # Need to declare a priority queue fronteir
+    stringify(curr)
     while (curr != goal):
         # Calculate f
         f = h1n(encode_locations(curr, {}), encode_locations(goal, {})) + step_cost
+        s = stringify(curr)
+        if (s not in visited or f < visited.get(s)):
+            visited[s] = f
+            # Add it to the fronteir
         step_cost += 1
     return
 
@@ -34,7 +50,7 @@ def h2n(curr, goal):
     return h1n(curr, goal) + 2 * linear_conf
 
 def heuristic2(initial, goal, problem):
-    # output = open(f"output{problem}h2.txt")
+    # output = open(f"output{problem}h2.txt", "w")
     curr = initial
     step_cost = 0
     while (curr != goal):
@@ -63,4 +79,4 @@ for entry_name in os.listdir(directory_path):
 
         # Perform A* search with heuristic functions
         heuristic1(initial_state, goal_state, entry_name.replace('.txt', ''))
-        heuristic2(initial_state, goal_state, entry_name.replace('.txt', ''))
+        # heuristic2(initial_state, goal_state, entry_name.replace('.txt', ''))
