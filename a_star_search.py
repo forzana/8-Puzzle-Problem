@@ -13,17 +13,34 @@ def encode_locations(arr, obj):
     return obj
 
 # h1(n) = the sum of the Manhattan distances of the tiles from their goal positions
-def h1(initial, goal, problem=""):
+def h1n(curr, goal):
+    sum = 0
+    return sum
+
+def heuristic1(initial, goal, problem=""):
     # if (problem):
     #     output = open(f"output{problem}h1.txt")
-    while (initial != goal):
-        curr = encode_locations(initial, {})
-
+    curr = initial
+    step_cost = 0
+    while (curr != goal):
+        # Calculate f
+        f = h1n(encode_locations(curr, {}), encode_locations(goal, {})) + step_cost
+        step_cost += 1
     return
 
 # h2(n) = h1(n) + 2 * number of linear conflicts
-def h2(initial, goal, problem):
+def h2n(curr, goal):
+    linear_conf = 0
+    return h1n(curr, goal) + 2 * linear_conf
+
+def heuristic2(initial, goal, problem):
     # output = open(f"output{problem}h2.txt")
+    curr = initial
+    step_cost = 0
+    while (curr != goal):
+        # Calculate f
+        f = h2n(encode_locations(curr, {}), encode_locations(goal, {})) + step_cost
+        step_cost += 1
     return
 
 # Process each input text file
@@ -45,5 +62,5 @@ for entry_name in os.listdir(directory_path):
         print("Goal state:", goal_state)
 
         # Perform A* search with heuristic functions
-        h1(initial_state, goal_state, entry_name.replace('.txt', ''))
-        h2(initial_state, goal_state, entry_name.replace('.txt', ''))
+        heuristic1(initial_state, goal_state, entry_name.replace('.txt', ''))
+        heuristic2(initial_state, goal_state, entry_name.replace('.txt', ''))
