@@ -1,8 +1,8 @@
-# Forzana Rime & Mohammed Uddin
+# Forzana Rime (fkr206) & Mohammed Uddin (msu227)
 # CS-GY 6613 AI Project 1
 
 import os
-from typing import Any, List
+from typing import Any
 from heapq import *
 from copy import deepcopy
 
