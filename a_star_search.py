@@ -1,9 +1,13 @@
+# Forzana Rime & Mohammed Uddin
+# CS-GY 6613 AI Project 1
+
 import os
 from typing import Any, List
 from heapq import *
 from copy import deepcopy
 
-directory_path = "./test/input" # The location of the input files
+input_directory_path = "./actual/input" # The location of the input files
+output_directory_path = "./actual/output" # Where the output files will go
 
 # Defines each node in our tree
 class Node:
@@ -141,8 +145,8 @@ def search(initial, goal, heuristic_func):
 # This function takes each input file and splits it into an initial and goal state
 def parse_input():
     # Process each input text file
-    for entry_name in os.listdir(directory_path):
-        full_path = os.path.join(directory_path, entry_name)
+    for entry_name in os.listdir(input_directory_path):
+        full_path = os.path.join(input_directory_path, entry_name)
         if os.path.isfile(full_path):
             # Open the file and grab the contents
             test_file = open(full_path)
@@ -154,27 +158,23 @@ def parse_input():
             goal_state = list(map(lambda x: x.split(' '), test_file_content.split('\n\n')[1].split('\n')))
 
             # Yield the original content, initial state matrix, goal state matrix, and the problem number
-            yield test_file_content, initial_state, goal_state, entry_name.replace('.txt', '')
+            yield test_file_content, initial_state, goal_state, entry_name.replace('Input', '').replace('.txt', '')
 
 def main():
     # For each problem (input file)
     for content, initial_state, goal_state, problem_number in parse_input():
         # For each heuristic function
         for func, index in [(h1n, "h1"), (h2n, "h2")]:
-            output_file = open(f"./test/output/output{problem_number}{index}.txt", "w") # Write to an output file with the naming convention required
-            output_file.write(content) # Write the input file content
-            output_file.write("\n\n") 
+            output_file = open(f"{output_directory_path}/output{problem_number}{index}.txt", "w") # Write to an output file with the naming convention required
+            output_file.write(content + "\n\n") # Write the input file content
             goal_node, reached = search(initial_state, goal_state, func) # Perform the A* search with the appropriate heuristic function
             if not goal_node: # Search was not successful
                 print("failure")
                 continue
             function_costs, actions = goal_node.get_info() # function costs and actions from the initial to the goal
-            output_file.write(str(goal_node.path_cost)) # path cost of the goal node will tell us the depth of our shallowest goal
-            output_file.write("\n")
-            output_file.write(str(len(reached))) # Number of nodes in our tree is the size of the reached table
-            output_file.write("\n")
-            output_file.write(actions) # actions list
-            output_file.write("\n")
+            output_file.write(str(goal_node.path_cost) + "\n") # path cost of the goal node will tell us the depth of our shallowest goal
+            output_file.write(str(len(reached)) + "\n") # Number of nodes in our tree is the size of the reached table
+            output_file.write(actions + "\n") # actions list
             output_file.write(function_costs) # f(n) values list
             output_file.close()
 
