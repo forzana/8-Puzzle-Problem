@@ -6,8 +6,8 @@ from typing import Any
 from heapq import *
 from copy import deepcopy
 
-input_directory_path = "./actual/input" # The location of the input files
-output_directory_path = "./actual/output" # Where the output files will go
+input_directory_path = "./input" # The location of the input files
+output_directory_path = "./output" # Where the output files will go
 
 # Defines each node in our tree
 class Node:
